@@ -3,6 +3,15 @@
 	"displayName": "Static site hero",
 	"description": "Helps with writing posts for static site generator",
 	"version": "0.0.1",
+	"publisher": "Tore Aurstad IT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/toreaurstad/staticsitehero.git"
+	},
+	"bugs": {
+		"url": "https://github.com/toreaurstad/staticsitehero/issues"
+	},
+	"homepage": "https://github.com/toreaurstad/staticsitehero/master/README.md",
 	"engines": {
 		"vscode": "^1.30.0"
 	},
@@ -27,7 +36,7 @@
 					},
 					"staticSiteHero.filePathTemplate": {
 						"type": "string",
-						"default": "/images/${year}/${month}",
+						"default": "/files/${year}/${month}",
 						"description": "Specifies the folder containing files"
 					}
 				}

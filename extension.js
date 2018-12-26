@@ -4,6 +4,12 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 
+const figureTemplate = "<figure class=\"\">\n" +
+	"![${figOptions.altText}](${figOptions.path}${figOptions.imageName})\n" +
+	"<figcaption>\n" +
+	"${figOptions.figCaption}\n" +
+	"</figcaption>\n" +
+	"</figure>";
 
 let insertText = (value) => {
 	let editor = vscode.window.activeTextEditor;
@@ -28,6 +34,27 @@ let getFileTemplate = () => {
 };
 
 
+let fillFigureTemplate = (figOptions) => {
+	let figure = figureTemplate.replace('${figOptions.imageName}', figOptions.imageName);
+	figure = figure.replace("${figOptions.path}", figOptions.path);
+	figure = figure.replace("${figOptions.altText}", figOptions.altText);
+	figure = figure.replace("${figOptions.figCaption}", figOptions.figCaption);
+
+	return figure;
+};
+
+let updateTemplateWithDate = (template) => {
+	let today = new Date();
+	let year = today.getFullYear();
+	let month = ('0' + (today.getMonth() + 1)).slice(-2);
+	template = template.replace("${year}", year);
+	template = template.replace("${month}", month);
+	return template;
+};
+
+exports.updateTemplateWithDate = updateTemplateWithDate;
+
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 
@@ -49,10 +76,10 @@ function activate(context) {
 			.then(result => {
 
 				if (result === 'File') {
-					insertText(getFileTemplate());
+					insertText("[Link Text](" + updateTemplateWithDate(getFileTemplate()) + ")");
 				}
 				else if (result === 'Image') {
-					insertText(getImageTemplate());
+					insertText("![Alt Text](" + updateTemplateWithDate(getImageTemplate()) + ")");
 				}
 			});
 
@@ -62,8 +89,27 @@ function activate(context) {
 	context.subscriptions.push(fileLinkDisposable);
 
 	let figureDisposable = vscode.commands.registerCommand('extension.insertFigure', () => {
-		vscode.window.showInformationMessage('Insert Figure Tag initiated');
-		insertText("Insert figure tag");
+		let template = getImageTemplate();
+		template = updateTemplateWithDate(template);
+		let figOptions = {
+			path: template,
+			imageName: "",
+			altText: '',
+			figCaption: ''
+		};
+		vscode.window.showInputBox({ prompt: "Image File Name" })
+			.then(value => {
+				figOptions.imageName = value;
+			})
+			.then(() => {
+				return vscode.window.showInputBox({ prompt: "Figure Caption" }).then(value => {
+					figOptions.altText = value;
+					figOptions.figCaption = value;
+				})
+			}).then(() => {
+				insertText(insertText(fillFigureTemplate(figOptions)));
+			});
+
 	});
 	context.subscriptions.push(figureDisposable);
 
@@ -73,10 +119,12 @@ function activate(context) {
 
 exports.activate = activate;
 
+
 // this method is called when your extension is deactivated
 function deactivate() { }
 
 module.exports = {
 	activate,
-	deactivate
+	deactivate,
+	updateTemplateWithDate
 }
