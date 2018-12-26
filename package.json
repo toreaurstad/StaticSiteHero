@@ -11,7 +11,12 @@
 	"bugs": {
 		"url": "https://github.com/toreaurstad/staticsitehero/issues"
 	},
-	"homepage": "https://github.com/toreaurstad/staticsitehero/master/README.md",
+	"icon": "images/chest.png",
+	"galleryBanner": {
+		"color": "#96DFFF",
+		"theme": "dark"
+	},
+	"homepage": "https://github.com/toreaurstad/staticsitehero/blob/master/README.md",
 	"engines": {
 		"vscode": "^1.30.0"
 	},
