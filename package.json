@@ -10,14 +10,55 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onCommand:extension.insertLink",
+		"onCommand:extension.insertFigure"
 	],
 	"main": "./extension.js",
 	"contributes": {
+		"configuration": [
+			{
+				"type": "object",
+				"title": "Static Site Hero Configuration",
+				"properties": {
+					"staticSiteHero.imagePathTemplate": {
+						"type": "string",
+						"default": "/images/${year}/${month}",
+						"description": "Specifies the folder containing images"
+					},
+					"staticSiteHero.filePathTemplate": {
+						"type": "string",
+						"default": "/images/${year}/${month}",
+						"description": "Specifies the folder containing files"
+					}
+				}
+			}
+		],
 		"commands": [
 			{
 				"command": "extension.helloWorld",
 				"title": "Hello World"
+			},
+			{
+				"command": "extension.insertLink",
+				"title": "Insert Markdown Link to File or Image"
+			},
+			{
+				"command": "extension.insertFigure",
+				"title": "Insert HTML figure"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "extension.insertLink",
+				"key": "ctrl+alt+l",
+				"mac": "shift+cmd+f",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "extension.insertFigure",
+				"key": "ctrl+alt+F",
+				"mac": "shift+cmd+l",
+				"when": "editorTextFocus"
 			}
 		]
 	},
